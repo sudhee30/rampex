@@ -10,3 +10,22 @@ for (var b of array){
 
 }
 //for each
+/*array=[10,12,11,13]
+array.forEach((elemen,index)=>{
+    console.log("Element is" ,elemen,"and its index is",index);
+})
+    */
+obj={
+    "Name " : "Sudhee",
+    "Class" : "AIML",
+    "Age" : 20
+}
+/*obj.forEach((value)=>{
+    console.log(value);
+})
+    */
+//for of task
+console.log(obj);
+for (const [key, value] of Object.entries(obj)) {
+    console.log(key, value);
+}
