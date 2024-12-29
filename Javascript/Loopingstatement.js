@@ -9,3 +9,4 @@ for (var b of array){
     console.log(b);
 
 }
+//for each
