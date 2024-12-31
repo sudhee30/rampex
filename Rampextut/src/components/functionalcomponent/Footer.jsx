@@ -10,13 +10,14 @@ function Footer() {
                 <form>
                     <h1>Keep in touch!</h1>
                     <label>Name:</label>
-
-                    <input type="text" name="name" placeholder="Enter your name"></input><br></br>
+                    
+                    <input type="text" name="name" placeholder="Enter your name"></input>
+                    <br/>
 
                     <label>Email:</label>
 
-                    <input type="email" name="name" placeholder="Enter your mailid"></input><br></br>
-                    <label>Contact:</label>
+                    <input type="email" name="name" placeholder="Enter your mailid"></input><br/>
+                    <label>Phone:</label>
 
                     <input type="number" name="name" placeholder="Enter your mobile number"></input><br></br>
                     <button onClick={send}>Send</button>
