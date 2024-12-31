@@ -9,18 +9,18 @@ function Footer() {
             <footer>
                 <form>
                     <h1>Keep in touch!</h1>
-                    <label>Name:</label>
+                    <label>Name:</label><br/>
                     
                     <input type="text" name="name" placeholder="Enter your name"></input>
                     <br/>
 
-                    <label>Email:</label>
+                    <label>Email:</label><br/>
 
                     <input type="email" name="name" placeholder="Enter your mailid"></input><br/>
-                    <label>Phone:</label>
+                    <label>Phone:</label><br/>
 
                     <input type="number" name="name" placeholder="Enter your mobile number"></input><br></br>
-                    <button onClick={send}>Send</button>
+                    <br/><button onClick={send}>Send</button>
 
                 </form>
             </footer>
