@@ -13,6 +13,8 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import Task1 from './components/functionalcomponent/Day5tsk1.jsx';
 import Task2 from './components/functionalcomponent/Day5task2.jsx';
 import UseContext from './components/functionalcomponent/UseContext.jsx';
+import Signup from './components/functionalcomponent/Signup.jsx'
+import Login from './components/functionalcomponent/Login.jsx'
 
 function App() {
   
@@ -29,6 +31,8 @@ function App() {
             <Route path = "/UseRef" element = {<UseRef/>}/>
             <Route path = "/Task1" element = {<Task1/>}/>
             <Route path = "/Task2" element = {<Task2/>}/>
+            <Route path='/Signup' element = {<Signup/>}/>
+            <Route path='/Login' element = {<Login/>}/>
 
             <Route path = "/UseContext" element = {<UseContext/>}/>
             <Route path = "/UseMemo" element = {<UseMemo/>}/>

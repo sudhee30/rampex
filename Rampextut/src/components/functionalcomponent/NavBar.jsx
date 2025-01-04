@@ -18,6 +18,10 @@ function NavBar(){
                     <li><Link to = '/Task2'>Task2</Link></li>
                     <li><Link to = '/UseCOntext'>UseContext</Link></li>
                     <li><Link to = '/UseMemo'>UseMemo</Link></li>
+                    <li><Link to = '/Signup'>Signup</Link></li>
+                    <li><Link to = '/Login'>Login</Link></li>
+
+
 
 
 
