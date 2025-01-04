@@ -1,31 +1,48 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-
-const Signup = () => {
-    const [form, setForm] = useState({ name: '', email: '', password: '' });
-
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const res = await axios.post('http://localhost:5000/api/users/signup', form);
-            alert('Signup successful!');
-        } catch (error) {
-            alert(error.response.data.message);
-        }
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <input name="name" placeholder="Name" onChange={handleChange} required />
-            <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
-            <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
-            <button type="submit">Signup</button>
-        </form>
-    );
-};
-
-export default Signup;
+function SignupPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handleSignup = (e) => {
+    e.preventDefault();
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Password:', password);
+  };
+  return (
+    <div>
+      <h1>Signup</h1>
+      <form onSubmit={handleSignup}>
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Signup</button>
+      </form>
+    </div>
+  );
+}
+export default SignupPage;
