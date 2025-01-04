@@ -3,8 +3,9 @@ var path = require('path')
 var mdb = require('mongoose')
 var User = require('./models/users')
 var app = express()
-const PORT = 3001
+const PORT = 3001;
 app.use(express.json())
+
 mdb.connect("mongodb://127.0.0.1:27017/kec").then(() => {
     console.log("MongoDB connection successful")
 }).catch(() => {
@@ -24,36 +25,61 @@ app.get('/static', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'))
 })
 
-app.post('/signup', (req,res) => {
-    console.log(req.body)
-    var {firstName, lastName, email} = req.body
-    console.log(firstName, lastName, email)
-    try{
-        var newUser = new User({
-        firstName:firstName,
-        lastName:lastName,
-        email:email
-        })
-        newUser.save()
-        console.log("User Added Successfully")
+app.post('/signup', (req, res) => {
+    try {
+        var newUser = new User(req.body).save();
+        console.log(req.body.password)
         res.status(200).send("User Added Succussfully")
     }
-    catch(err){
+    catch (err) {
         console.log(err)
     }
 })
-app.get('/getsignup',async(req,res)=>{
+
+app.get('/getsignup', async(req,res) => {
     try{
-        var allSignUpRecords = await User.find()
-        res.json(allSignUpRecords)
+        var allSignupRecords = await User.find()
+        res.json(allSignupRecords)
         console.log("All data fetched")
     }
     catch(err){
         console.log("Cannot able to read the records")
-        res.send(err)
     }
 })
-
+app.post('/login', async (req,res)=>{
+    var {email,password}=req.body
+    try{
+        var existingUser = await User.findOne({email:email}) //should use findone strictly
+        console.log(existingUser)
+       if(!existingUser){
+        res.json({message  :"Login unSuccessful",isLoggedin : false})
+    }
+    else{
+        res.json({message  :"Login Successfull",isLoggedin : true})
+    }
+}
+catch(err){
+        console.log("Login Failed")
+    }
+})
 app.listen(PORT, () => {
     console.log(`Backend Server Started \n Url: http://localhost:${PORT}`) //listen should always be at the last
 })
+/// interview qn:debug
+//{
+  //  _id:  ObjectId('6777a9a6053756ad4f032e83'),        
+    //firstName: 'Prathi',
+    //lastName: 'Ksha',
+    //password: 'Sudhee',
+    //email: 'Prathi@gmail.com',
+   //// __v: 0
+ // }
+ /*  ans is that new keyword should be there
+ {
+    _id: new ObjectId('6777a9a6053756ad4f032e83'),
+    firstName: 'Prathi',
+    lastName: 'Ksha',
+    password: 'Sudhee',
+    email: 'Prathi@gmail.com',
+    __v: 0
+  }*/
