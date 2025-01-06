@@ -1,70 +1,106 @@
-var express = require('express')
+var express = require ('express')
 var path = require('path')
 var mdb = require('mongoose')
-var User = require('./models/users')
+var user = require('../Backend/models/users')
+var cors = require('cors')
+const { env } = require('process')
 var app = express()
-const PORT = 3001;
+const PORT =3001
+app.use(cors())
 app.use(express.json())
 
-mdb.connect("mongodb://127.0.0.1:27017/kec").then(() => {
-    console.log("MongoDB connection successful")
-}).catch(() => {
-    console.log("Check your connection string")  //connection string is the url to connect to mongodb
+
+mdb.connect('mongodb://127.0.0.1:27017/kec', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    console.log("MongoDB connection successful");
+}).catch((err) => {
+    console.error("Check your connection string:", err);
+});
+
+
+app.get('/',(req,res)=>{
+    res.json("welcome to backend")
 })
 
-app.get('/', (req, res) => {
-    res.send("Welcome to Backend Server")
+app.get('/volunteering',(req,res)=>{
+    res.json({PORT:PORT,url:"localhost"})
 })
 
-app.get('/json', (req, res) => {
-    res.json("Welcome to Backend")
+app.get('/sendfile',(req,res)=>{
+    // console.log(__dirname)
+    res.sendFile(path.join(__dirname,'index.html'))
 })
 
-app.get('/static', (req, res) => {
-    console.log("Running")
-    res.sendFile(path.join(__dirname, 'index.html'))
-})
+app.use(cors({
+    origin: 'http://localhost:3000', // Adjust the origin as per your frontend
+    credentials: true,
+}));
 
-app.post('/signup', (req, res) => {
+
+app.get('/getsignup', async (req, res) => {
     try {
-        var newUser = new User(req.body).save();
-        console.log(req.body.password)
-        res.status(200).send("User Added Succussfully")
+        const allSignupRecords = await user.find();
+        res.status(200).json(allSignupRecords);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error" });
     }
-    catch (err) {
-        console.log(err)
-    }
-})
+});
 
-app.get('/getsignup', async(req,res) => {
-    try{
-        var allSignupRecords = await User.find()
-        res.json(allSignupRecords)
-        console.log("All data fetched")
+
+
+app.post('/login', async (req, res) => {
+    var { email, password } = req.body;
+
+    try {
+        const existingUser = await user.findOne({ email });
+        console.log(existingUser);
+
+        if (!existingUser) {
+            return res.status(404).json({ message: "User not found", isLoggedIn: false });
+        }
+
+        if (existingUser.password !== password) {
+            return res.status(401).json({ message: "Invalid Credentials", isLoggedIn: false });
+        }
+
+        res.status(200).json({ message: "Login successful", isLoggedIn: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error", isLoggedIn: false });
     }
-    catch(err){
-        console.log("Cannot able to read the records")
+});
+
+
+app.post('/signup', async (req, res) => {
+    var { firstName, lastName, email, password } = req.body;
+
+    try {
+        // Check if user already exists
+        const existingUser = await user.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        // Create a new user and save
+        const newUser = new user({ firstName, lastName, email, password });
+        await newUser.save();
+
+        console.log("User added successfully");
+        res.status(201).json({ message: "User added successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error" });
     }
-})
-app.post('/login', async (req,res)=>{
-    var {email,password}=req.body
-    try{
-        var existingUser = await User.findOne({email:email}) //should use findone strictly
-        console.log(existingUser)
-       if(!existingUser){
-        res.json({message  :"Login unSuccessful",isLoggedin : false})
-    }
-    else{
-        res.json({message  :"Login Successfull",isLoggedin : true})
-    }
-}
-catch(err){
-        console.log("Login Failed")
-    }
-})
-app.listen(PORT, () => {
-    console.log(`Backend Server Started \n Url: http://localhost:${PORT}`) //listen should always be at the last
-})
+});
+
+
+app.listen(PORT,()=>{
+    console.log("server started")})
+
+
 /// interview qn:debug
 //{
   //  _id:  ObjectId('6777a9a6053756ad4f032e83'),        
